@@ -1,5 +1,4 @@
 import './App.css'
-import SignUp from './pages/SignUp'
 import RoutePath from './routes/RoutePath'
 
 function App() {

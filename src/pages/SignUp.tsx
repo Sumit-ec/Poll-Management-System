@@ -27,7 +27,7 @@ export default function SignUp() {
                 createdAt: new Date()
             });
 
-            alert("Signup successful and data saved!");
+            alert("Signup successful");
             navigate("/login");
         } catch (error: any) {
             setError(error.message);
@@ -35,22 +35,24 @@ export default function SignUp() {
     };
 
     return (
-        <div className="signup-container">
-            <div>
-                <h1 className="auth-container">Create an Account</h1>
-                <InputName value={name} onChange={(e) => setName(e.target.value)} />
-                <InputEmail value={email} onChange={(e) => setEmail(e.target.value)} />
-                <InputPassword value={password} onChange={(e) => setPassword(e.target.value)} />
-                {error && <p style={{ color: "red" }}>{error}</p>}
-            </div>
+        <div className="contain-outer">
+            <div className="signup-container">
+                <div>
+                    <h1 className="auth-container">Create an Account</h1>
+                    <InputName value={name} onChange={(e) => setName(e.target.value)} />
+                    <InputEmail value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <InputPassword value={password} onChange={(e) => setPassword(e.target.value)} />
+                    {error && <p style={{ color: "red" }}>{error}</p>}
+                </div>
 
-            <div className="bottom-signup">
-                <p>Already have an account?</p>
-                <NavLink to="/login">Sign-in</NavLink>
-            </div>
+                <div className="bottom-signup">
+                    <p>Already have an account?</p>
+                    <NavLink to="/login" style={{ margin: "auto" }}>Sign-in</NavLink>
+                </div>
 
-            <div className="button-submit">
-                <Buttons title="Sign Up" onClick={handleSignup} />
+                <div className="button-submit">
+                    <Buttons title="Sign Up" onClick={handleSignup} />
+                </div>
             </div>
         </div>
     );

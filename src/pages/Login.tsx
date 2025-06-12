@@ -23,9 +23,10 @@ export default function Login() {
                 const userData = userDoc.data();
                 localStorage.setItem("user", JSON.stringify(userData));
 
-                alert(`Login successful! Role: ${userData.role}`);
+                // alert(`Login successful! Role: ${userData.role}`);
+
                 if (userData.role === "admin") {
-                    navigate("/dashboard");
+                    navigate("/admin-dashboard");
                 } else {
                     navigate("/home");
                 }
@@ -38,21 +39,23 @@ export default function Login() {
     };
 
     return (
-        <div className="signup-container">
-            <div>
-                <h1 className="auth-container">Log In</h1>
-                <InputEmail value={email} onChange={(e) => setEmail(e.target.value)} />
-                <InputPassword value={password} onChange={(e) => setPassword(e.target.value)} />
-                {/* {error && <p style={{ color: "red" }}>{error}</p>} */}
-            </div>
+        <div className="contain-outer">
+            <div className="signup-container">
+                <div>
+                    <h1 className="auth-container">Log In</h1>
+                    <InputEmail value={email} onChange={(e) => setEmail(e.target.value)} />
+                    <InputPassword value={password} onChange={(e) => setPassword(e.target.value)} />
+                    {error && <p style={{ color: "red" }}>{error}</p>}
+                </div>
 
-            <div className="bottom-signup">
-                <p>Don’t have an account?</p>
-                <NavLink to="/">Sign-Up</NavLink>
-            </div>
+                <div className="bottom-signup">
+                    <p>Don’t have an account?</p>
+                    <NavLink to="/" style={{ margin: "auto" }}>Sign-Up</NavLink>
+                </div>
 
-            <div className="button-submit">
-                <Buttons title="Log In" onClick={handleLogin} />
+                <div className="button-submit">
+                    <Buttons title="Log In" onClick={handleLogin} />
+                </div>
             </div>
         </div>
     );
