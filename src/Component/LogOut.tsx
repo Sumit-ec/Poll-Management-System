@@ -8,8 +8,7 @@ export default function LogOut() {
     const handleLogout = async () => {
         try {
             await signOut(auth);
-            // localStorage.removeItem("user"); // Optional: clear user data
-            navigate("/login"); // Redirect to login page
+            navigate("/login");
         } catch (error) {
             console.error("Logout failed:", error);
             alert("Logout failed. Please try again.");

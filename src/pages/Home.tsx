@@ -6,7 +6,6 @@ import {
     doc,
     updateDoc,
     increment,
-    arrayUnion,
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import NavBar from "./NavBar";
@@ -16,7 +15,7 @@ interface Poll {
     name: string;
     options: string[];
     votes: Record<string, number>;
-    voters?: string[];
+    voters?: Record<string, string>;
 }
 
 export default function Home() {
@@ -45,7 +44,7 @@ export default function Home() {
                     name: data.name,
                     options: data.options,
                     votes: data.votes || {},
-                    voters: data.voters || [],
+                    voters: data.voters || {},
                 };
             });
             setPolls(pollData);
@@ -54,35 +53,50 @@ export default function Home() {
         }
     };
 
-    const handleVote = async (pollId: string, option: string) => {
+    const handleVote = async (pollId: string, selectedOption: string) => {
         if (!userId) {
             alert("Please log in to vote.");
             return;
         }
 
         const poll = polls.find((p) => p.id === pollId);
-        if (poll?.voters?.includes(userId)) {
-            alert("You have already voted for this poll.");
+        if (!poll) return;
+
+        const previousVote = poll.voters?.[userId];
+
+        if (previousVote === selectedOption) {
+            alert("You already voted for this option.");
             return;
         }
 
-        try {
-            const pollRef = doc(db, "polls", pollId);
-            await updateDoc(pollRef, {
-                [`votes.${option}`]: increment(1),
-                voters: arrayUnion(userId),
-            });
+        const pollRef = doc(db, "polls", pollId);
 
-            alert("Thank you for voting!");
+        const updates: any = {
+            [`voters.${userId}`]: selectedOption,
+        };
+
+        if (previousVote) {
+            updates[`votes.${previousVote}`] = increment(-1);
+        }
+        updates[`votes.${selectedOption}`] = increment(1);
+
+        try {
+            await updateDoc(pollRef, updates);
 
             setPolls(prevPolls => {
                 return prevPolls.map(poll => {
                     if (poll.id !== pollId) return poll;
 
                     const updatedVotes = { ...poll.votes };
-                    updatedVotes[option] = (updatedVotes[option] || 0) + 1;
+                    if (previousVote) {
+                        updatedVotes[previousVote] = (updatedVotes[previousVote] || 1) - 1;
+                    }
+                    updatedVotes[selectedOption] = (updatedVotes[selectedOption] || 0) + 1;
 
-                    const updatedVoters = [...(poll.voters || []), userId];
+                    const updatedVoters = {
+                        ...poll.voters,
+                        [userId]: selectedOption,
+                    };
 
                     return {
                         ...poll,
@@ -101,7 +115,7 @@ export default function Home() {
         <>
             <NavBar />
             <div className="home-container">
-                <h2 className="poll-header"> Polls List</h2>
+                <h2 className="poll-header">Polls List</h2>
                 {polls.map((poll) => (
                     <div key={poll.id} className="poll-card">
                         <h3>{poll.name}</h3>
@@ -109,12 +123,18 @@ export default function Home() {
                             <button
                                 key={option}
                                 onClick={() => handleVote(poll.id, option)}
-                                disabled={poll.voters?.includes(userId ?? "")}
-                                className="vote-button"
+                                className={`vote-button ${poll.voters?.[userId ?? ""] === option ? "selected-option" : ""
+                                    }`}
                             >
                                 {option}
                             </button>
                         ))}
+                        {poll.voters?.[userId ?? ""] && (
+                            <p className="voted-info">
+                                You voted for:{" "}
+                                <strong>{poll.voters[userId ?? ""]}</strong>
+                            </p>
+                        )}
                     </div>
                 ))}
             </div>

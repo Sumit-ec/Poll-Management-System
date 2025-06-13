@@ -7,6 +7,7 @@ import LogOut from "../Component/LogOut";
 
 export default function NavBar() {
     const [isAdmin, setIsAdmin] = useState(false);
+    const [isUser, setIsUser] = useState(false);
 
     useEffect(() => {
         const auth = getAuth();
@@ -19,6 +20,7 @@ export default function NavBar() {
                 if (userSnap.exists()) {
                     const data = userSnap.data();
                     setIsAdmin(data.role === "admin");
+                    setIsUser(data.role === "guest");
                 }
             }
         });
@@ -31,11 +33,15 @@ export default function NavBar() {
             <nav className="navbar">
                 <div className="nav-left">
                     <ul className="nav-links">
-                        <li>
-                            <NavLink to="/home">
-                                Home
-                            </NavLink>
-                        </li>
+                        {isUser && (
+                            <>
+                                <li>
+                                    <NavLink to="/home">
+                                        Home
+                                    </NavLink>
+                                </li>
+                            </>
+                        )}
 
                         {isAdmin && (
                             <>
@@ -49,13 +55,13 @@ export default function NavBar() {
                                         Create Poll
                                     </NavLink>
                                 </li>
-                                <li>
-                                    <NavLink to="/admin-dashboard/results">
-                                        View Result
-                                    </NavLink>
-                                </li>
                             </>
                         )}
+                        <li>
+                            <NavLink to="/results">
+                                View Result
+                            </NavLink>
+                        </li>
                     </ul>
                 </div>
 
