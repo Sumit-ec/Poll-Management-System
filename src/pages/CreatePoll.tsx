@@ -1,5 +1,5 @@
 import React, { useState, type JSX } from "react";
-import AdminNavBar from "./NavBar";
+import NavBar from "./NavBar";
 import { db } from "../Services/firebase";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 
@@ -57,7 +57,7 @@ export default function CreatePoll(): JSX.Element {
 
     return (
         <div>
-            <AdminNavBar />
+            <NavBar />
             <div className="container-poll">
                 <h2 className="poll-title">Create New Poll</h2>
                 <form onSubmit={handleSubmit} className="poll-form">
