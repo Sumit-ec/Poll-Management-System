@@ -23,8 +23,6 @@ export default function Login() {
                 const userData = userDoc.data();
                 localStorage.setItem("user", JSON.stringify(userData));
 
-                // alert(`Login successful! Role: ${userData.role}`);
-
                 if (userData.role === "admin") {
                     navigate("/admin-dashboard");
                 } else {

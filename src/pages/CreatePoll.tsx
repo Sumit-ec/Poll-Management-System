@@ -93,7 +93,7 @@ export default function CreatePoll(): JSX.Element {
                             className="add-option-btn"
                             onClick={handleAddOption}
                         >
-                            + Add Option
+                            Add Option
                         </button>
 
                         <button
