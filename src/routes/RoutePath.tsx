@@ -45,6 +45,8 @@ export default function RoutePath() {
                     </ProtectRoute>
                 }
             />
+            <Route path="/admin-dashboard/edit-poll/:id" element={<CreatePoll />} />
         </Routes>
+
     );
 }

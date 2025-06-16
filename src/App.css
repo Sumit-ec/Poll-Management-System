@@ -231,6 +231,12 @@ html {
 .add-option-btn {
   background-color: #f0f0f0;
   color: #333;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .add-option-btn:hover {
@@ -240,6 +246,12 @@ html {
 .remove-option-btn {
   background-color: #fef2f2;
   color: #b91c1c;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .remove-option-btn:hover {
